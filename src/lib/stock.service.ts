@@ -29,7 +29,7 @@ export async function createPiece(piece: Partial<PieceRechange>): Promise<PieceR
         id: generateId('piece'),
         code: piece.code || '',
         designation: piece.designation || '',
-        unite: piece.unite || 'unite',
+        unite: (piece.unite || 'unite') as PieceRechange['unite'],
         stock_actuel: piece.stock_actuel || 0,
         stock_minimum: piece.stock_minimum || 0,
         emplacement: piece.emplacement || '',
@@ -76,7 +76,7 @@ export async function getCategoriesPiece(): Promise<CategoriePiece[]> {
 }
 
 // Mouvements de stock
-export async function ajouterMouvementStock(pieceId: string, type: 'entree' | 'sortie', quantite: number, motif: string): Promise<void> {
+export async function ajouterMouvementStock(pieceId: string, type: 'entree' | 'sortie', quantite: number, _motif: string): Promise<void> {
     await delay(300);
     const piece = mockPiecesRechange.find(p => p.id === pieceId);
     if (!piece) throw new Error('Pièce non trouvée');
@@ -127,7 +127,7 @@ export async function createFournisseur(fournisseur: Partial<Fournisseur>): Prom
         id: String(mockFournisseurs.length + 1),
         code: fournisseur.code || '',
         nom: fournisseur.nom || '',
-        type_fournisseur: fournisseur.type_fournisseur || 'pieces',
+        type_fournisseur: (fournisseur.type_fournisseur || 'pieces') as Fournisseur['type_fournisseur'],
         actif: true,
         ...fournisseur
     } as Fournisseur;

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Plus } from 'lucide-react';
 import { getOrdresTravail } from '../lib/ordres-travail.service';
 import { getPlansMaintenance } from '../lib/maintenance.service';
-import type { OrdreTravail, PlanMaintenance } from '../lib/supabase';
+
 
 interface CalendarEvent {
     id: string;

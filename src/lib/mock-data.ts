@@ -1,7 +1,21 @@
 // Données fictives pour l'application GMAO
 // Ce fichier remplace complètement Supabase
+import type {
+    Profile,
+    CategorieEquipement,
+    Site,
+    Equipement,
+    DemandeIntervention,
+    Specialite,
+    Technicien,
+    OrdreTravail,
+    PlanMaintenance,
+    CategoriePiece,
+    Fournisseur,
+    PieceRechange
+} from './supabase';
 
-export const mockProfils = [
+export const mockProfils: Profile[] = [
     { id: '1', nom: 'El Amrani', prenom: 'Youssef', email: 'youssef.elamrani@gmao.ma', telephone: '0661234567', actif: true, created_at: '2024-01-15T10:00:00Z' },
     { id: '2', nom: 'Bennani', prenom: 'Fatima', email: 'fatima.bennani@gmao.ma', telephone: '0672345678', actif: true, created_at: '2024-01-16T10:00:00Z' },
     { id: '3', nom: 'Alaoui', prenom: 'Mohammed', email: 'mohammed.alaoui@gmao.ma', telephone: '0683456789', actif: true, created_at: '2024-01-17T10:00:00Z' },
@@ -12,7 +26,7 @@ export const mockProfils = [
     { id: '8', nom: 'Fassi', prenom: 'Laila', email: 'laila.fassi@gmao.ma', telephone: '0638901234', actif: true, created_at: '2024-01-22T10:00:00Z' },
 ];
 
-export const mockCategoriesEquipement = [
+export const mockCategoriesEquipement: CategorieEquipement[] = [
     { id: '1', nom: 'Pneumatique', description: 'Équipements pneumatiques', icone: '💨' },
     { id: '2', nom: 'Hydraulique', description: 'Équipements hydrauliques', icone: '🔧' },
     { id: '3', nom: 'Électrique', description: 'Équipements électriques', icone: '⚡' },
@@ -20,12 +34,12 @@ export const mockCategoriesEquipement = [
     { id: '5', nom: 'Convoyage', description: 'Systèmes de convoyage', icone: '🔄' },
 ];
 
-export const mockSites = [
+export const mockSites: Site[] = [
     { id: '1', nom: 'Site Principal', adresse: '123 Rue de l\'Industrie', ville: 'Casablanca', code_postal: '20000', pays: 'Maroc', actif: true },
     { id: '2', nom: 'Site Secondaire', adresse: '456 Avenue de la Production', ville: 'Rabat', code_postal: '10000', pays: 'Maroc', actif: true },
 ];
 
-export const mockEquipements = [
+export const mockEquipements: Equipement[] = [
     {
         id: '1',
         code: 'EQ-CAS-001',
@@ -138,7 +152,7 @@ export const mockEquipements = [
         date_mise_service: '2023-05-12',
         site_id: '1',
         statut: 'en_service',
-        criticite: 'basse',
+        criticite: 'faible',
         valeur_achat: 45000,
         description: 'Système de ventilation zone 2',
         actif: true,
@@ -148,7 +162,7 @@ export const mockEquipements = [
     },
 ];
 
-export const mockDemandesIntervention = [
+export const mockDemandesIntervention: DemandeIntervention[] = [
     {
         id: '1',
         numero: 'DI-2026-001',
@@ -237,14 +251,14 @@ export const mockDemandesIntervention = [
     },
 ];
 
-export const mockSpecialites = [
+export const mockSpecialites: Specialite[] = [
     { id: '1', nom: 'Mécanique', description: 'Maintenance mécanique' },
     { id: '2', nom: 'Électricité', description: 'Maintenance électrique' },
     { id: '3', nom: 'Hydraulique', description: 'Maintenance hydraulique' },
     { id: '4', nom: 'Pneumatique', description: 'Maintenance pneumatique' },
 ];
 
-export const mockTechniciens = [
+export const mockTechniciens: Technicien[] = [
     {
         id: '1',
         profil_id: '1',
@@ -307,7 +321,7 @@ export const mockTechniciens = [
     },
 ];
 
-export const mockOrdresTravail = [
+export const mockOrdresTravail: OrdreTravail[] = [
     {
         id: '1',
         numero: 'OT-MAR-2026-001',
@@ -332,7 +346,7 @@ export const mockOrdresTravail = [
     {
         id: '2',
         numero: 'OT-MAR-2026-002',
-        demande_id: null,
+        demande_id: undefined,
         equipement_id: '1',
         type_maintenance: 'preventive',
         priorite: 'normale',
@@ -351,7 +365,7 @@ export const mockOrdresTravail = [
     {
         id: '3',
         numero: 'OT-MAR-2026-003',
-        demande_id: null,
+        demande_id: undefined,
         equipement_id: '4',
         type_maintenance: 'predictive',
         priorite: 'haute',
@@ -370,7 +384,7 @@ export const mockOrdresTravail = [
     },
 ];
 
-export const mockPlansMaintenance = [
+export const mockPlansMaintenance: PlanMaintenance[] = [
     {
         id: '1',
         equipement_id: '1',
@@ -429,7 +443,7 @@ export const mockPlansMaintenance = [
     },
 ];
 
-export const mockCategoriesPiece = [
+export const mockCategoriesPiece: CategoriePiece[] = [
     { id: '1', nom: 'Roulements', description: 'Roulements et paliers' },
     { id: '2', nom: 'Courroies', description: 'Courroies et transmissions' },
     { id: '3', nom: 'Filtres', description: 'Filtres et cartouches' },
@@ -438,7 +452,7 @@ export const mockCategoriesPiece = [
     { id: '6', nom: 'Électrique', description: 'Composants électriques' },
 ];
 
-export const mockFournisseurs = [
+export const mockFournisseurs: Fournisseur[] = [
     {
         id: '1',
         code: 'FRN-CAS-001',
@@ -493,7 +507,7 @@ export const mockFournisseurs = [
     },
 ];
 
-export const mockPiecesRechange = [
+export const mockPiecesRechange: PieceRechange[] = [
     {
         id: '1',
         code: 'PR-001',

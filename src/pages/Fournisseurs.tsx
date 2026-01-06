@@ -14,7 +14,7 @@ const typeLabels: Record<string, { text: string; class: string }> = {
 export default function Fournisseurs() {
     const [searchTerm, setSearchTerm] = useState('');
     const [fournisseurs, setFournisseurs] = useState<Fournisseur[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [, setLoading] = useState(true);
 
     useEffect(() => {
         loadData();

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, Filter, Calendar, TrendingDown, TrendingUp, AlertTriangle } from 'lucide-react';
+import { Calendar, TrendingDown, AlertTriangle } from 'lucide-react';
 
 const historiquePannes = [
     { id: 1, date: '2024-12-28', equipement: 'Pompe hydraulique Bosch', type: 'Fuite', dureeArret: 4.5, cout: 850, impact: 'eleve' },

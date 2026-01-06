@@ -40,8 +40,8 @@ export async function createEquipement(equipement: Partial<Equipement>): Promise
         id: generateId('equipement'),
         code: equipement.code || '',
         nom: equipement.nom || '',
-        statut: equipement.statut || 'en_service',
-        criticite: equipement.criticite || 'moyenne',
+        statut: (equipement.statut || 'en_service') as Equipement['statut'],
+        criticite: (equipement.criticite || 'moyenne') as Equipement['criticite'],
         actif: true,
         created_at: new Date().toISOString(),
         ...equipement

@@ -37,7 +37,6 @@ export default function DemandesIntervention() {
     const [showModal, setShowModal] = useState(false);
     const [equipements, setEquipements] = useState<Equipement[]>([]);
     const [demandesData, setDemandesData] = useState<DemandeType[]>([]);
-    const [loading, setLoading] = useState(false);
     const [loadingDemandes, setLoadingDemandes] = useState(true);
     const [submitting, setSubmitting] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
@@ -54,8 +53,8 @@ export default function DemandesIntervention() {
     const [techniciens, setTechniciens] = useState<Technicien[]>([]);
     const [convertData, setConvertData] = useState({
         technicien_id: '',
-        priorite: 'normale',
-        type_maintenance: 'corrective',
+        priorite: 'normale' as any,
+        type_maintenance: 'corrective' as any,
         date_prevue_debut: '',
         date_prevue_fin: ''
     });
@@ -63,8 +62,8 @@ export default function DemandesIntervention() {
     // Form state with default date
     const [formData, setFormData] = useState({
         equipement_id: '',
-        type_demande: 'panne',
-        priorite: 'normale',
+        type_demande: 'panne' as any,
+        priorite: 'normale' as any,
         date_souhaitee: new Date().toISOString().split('T')[0], // Today's date
         titre: '',
         description: '',
@@ -102,7 +101,7 @@ export default function DemandesIntervention() {
 
     async function fetchEquipements() {
         try {
-            setLoading(true);
+
             const equipData = await getEquipements();
             setEquipements(equipData);
         } catch (error) {
@@ -110,7 +109,7 @@ export default function DemandesIntervention() {
             setError('Erreur lors du chargement des équipements');
             notify('error_generic', 'error');
         } finally {
-            setLoading(false);
+
         }
     }
 
@@ -630,7 +629,7 @@ export default function DemandesIntervention() {
                                     >
                                         <option value="">Choisir un technicien</option>
                                         {techniciens.map(t => (
-                                            <option key={t.id} value={t.id}>{t.prenom} {t.nom} ({t.specialite})</option>
+                                            <option key={t.id} value={t.id}>{t.profil?.prenom} {t.profil?.nom} ({t.specialite?.nom || 'Généraliste'})</option>
                                         ))}
                                     </select>
                                 </div>

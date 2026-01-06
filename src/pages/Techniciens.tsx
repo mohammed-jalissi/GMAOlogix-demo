@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Search, Filter, Eye, Edit, Phone, Mail, CheckCircle, XCircle, Trash2, X, Save } from 'lucide-react';
+import { Plus, Search, Phone, Mail, CheckCircle, XCircle, Trash2, X, Save } from 'lucide-react';
 import { getTechniciens, createTechnicien, deleteTechnicien } from '../lib/maintenance.service';
 import type { Technicien } from '../lib/supabase';
 import { useDarijaNotify } from '../hooks/useDarijaNotify';
@@ -25,7 +25,7 @@ export default function Techniciens() {
         email: '',
         telephone: '',
         specialite_id: '',
-        niveau: 'junior',
+        niveau: 'junior' as any,
         disponible: true
     });
 
@@ -85,7 +85,7 @@ export default function Techniciens() {
                 email: '',
                 telephone: '',
                 specialite_id: '',
-                niveau: 'junior',
+                niveau: 'junior' as any,
                 disponible: true
             });
             fetchData();

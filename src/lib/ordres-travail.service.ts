@@ -32,11 +32,11 @@ export async function createOrdreTravail(ot: Partial<OrdreTravail>): Promise<Ord
     const newOT: OrdreTravail = {
         id: generateId('ot'),
         numero,
-        type_maintenance: ot.type_maintenance || 'corrective',
-        priorite: ot.priorite || 'normale',
+        type_maintenance: (ot.type_maintenance || 'corrective') as OrdreTravail['type_maintenance'],
+        priorite: (ot.priorite || 'normale') as OrdreTravail['priorite'],
         titre: ot.titre || '',
         description: ot.description || '',
-        statut: ot.statut || 'planifie',
+        statut: (ot.statut || 'planifie') as OrdreTravail['statut'],
         created_at: new Date().toISOString(),
         ...ot
     } as OrdreTravail;
@@ -116,11 +116,11 @@ export async function createDemandeIntervention(demande: Partial<DemandeInterven
         id: generateId('demande'),
         numero,
         demandeur_id: demande.demandeur_id || '1',
-        priorite: demande.priorite || 'normale',
-        type_demande: demande.type_demande || 'panne',
+        priorite: (demande.priorite || 'normale') as DemandeIntervention['priorite'],
+        type_demande: (demande.type_demande || 'panne') as DemandeIntervention['type_demande'],
         titre: demande.titre || '',
         description: demande.description || '',
-        statut: demande.statut || 'nouvelle',
+        statut: (demande.statut || 'nouvelle') as DemandeIntervention['statut'],
         created_at: new Date().toISOString(),
         ...demande
     } as DemandeIntervention;

@@ -19,7 +19,7 @@ export const DATASET_REQUIREMENTS = [
     { name: 'Charge (%)', type: 'float', description: 'Charge actuelle de l\'équipement' }
 ];
 
-export async function trainModel(algorithm: string, dataPoints: number): Promise<boolean> {
+export async function trainModel(_algorithm: string, _dataPoints: number): Promise<boolean> {
     // Simulate training time
     return new Promise((resolve) => {
         setTimeout(() => {

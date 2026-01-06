@@ -2,13 +2,10 @@ import { useState } from 'react';
 import {
     Brain,
     Upload,
-    Play,
     BarChart2,
     FileText,
-    CheckCircle,
     AlertTriangle,
     Info,
-    Calendar,
     Settings,
     Database,
     Cpu

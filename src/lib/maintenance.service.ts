@@ -29,7 +29,7 @@ export async function createTechnicien(technicien: Partial<Technicien>): Promise
     await delay(300);
     const newTechnicien: Technicien = {
         id: generateId('technicien'),
-        niveau: technicien.niveau || 'junior',
+        niveau: (technicien.niveau || 'junior') as Technicien['niveau'],
         disponible: true,
         ...technicien
     } as Technicien;
@@ -98,7 +98,7 @@ export async function createPlanMaintenance(plan: Partial<PlanMaintenance>): Pro
     const newPlan: PlanMaintenance = {
         id: generateId('plan'),
         nom: plan.nom || '',
-        type_declenchement: plan.type_declenchement || 'calendrier',
+        type_declenchement: (plan.type_declenchement || 'calendrier') as PlanMaintenance['type_declenchement'],
         actif: true,
         ...plan
     } as PlanMaintenance;

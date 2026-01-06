@@ -6,7 +6,7 @@ export const getFournisseurs = async () => {
     return mockFournisseurs.map(f => {
         // Calculer les métriques dynamiques
         const piecesFournies = mockPiecesRechange.filter(p => p.fournisseur_id === f.id);
-        const valeurStock = piecesFournies.reduce((acc, p) => acc + (p.stock_actuel * p.prix_unitaire), 0);
+        const valeurStock = piecesFournies.reduce((acc, p) => acc + (p.stock_actuel * (p.prix_unitaire || 0)), 0);
 
         return {
             ...f,
