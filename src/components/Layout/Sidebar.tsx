@@ -16,8 +16,10 @@ import {
   ChevronLeft,
   ChevronRight,
   Cog,
-  FileText
+  FileText,
+  LogOut
 } from 'lucide-react';
+import { useAuth } from '../../contexts/SimpleAuthContext';
 
 const menuItems = [
   {
@@ -61,7 +63,7 @@ const menuItems = [
 
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
-  const location = useLocation();
+  const { logout } = useAuth();
 
   return (
     <aside className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
@@ -92,10 +94,18 @@ export default function Sidebar() {
         ))}
       </nav>
 
-      <div className="sidebar-footer">
+      <div className="sidebar-footer" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         <button className="toggle-btn" onClick={() => setCollapsed(!collapsed)}>
           {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
           {!collapsed && <span>Réduire</span>}
+        </button>
+        <button
+          className="toggle-btn"
+          onClick={logout}
+          style={{ color: '#ef4444', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '12px' }}
+        >
+          <LogOut size={18} />
+          {!collapsed && <span>Déconnexion</span>}
         </button>
       </div>
     </aside>

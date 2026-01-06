@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Search, Filter, Eye, Edit, CheckCircle, XCircle, Clock, ArrowRight, X, AlertCircle, Printer } from 'lucide-react';
+import { Plus, Search, Eye, CheckCircle, XCircle, ArrowRight, X, AlertCircle, Printer } from 'lucide-react';
 import { generateDemandePDF } from '../lib/pdf-generator';
 import { getEquipements } from '../lib/equipements.service';
 import { createDemandeIntervention, getDemandesIntervention, approuverDemande, rejeterDemande, convertirDemandeEnOT } from '../lib/ordres-travail.service';
@@ -388,16 +388,31 @@ export default function DemandesIntervention() {
                                         </button>
                                         {d.statut === 'nouvelle' && (
                                             <>
-                                                <button className="header-icon-btn" style={{ width: '30px', height: '30px', background: 'rgba(34, 197, 94, 0.1)' }} title="Approuver">
+                                                <button
+                                                    className="header-icon-btn"
+                                                    style={{ width: '30px', height: '30px', background: 'rgba(34, 197, 94, 0.1)' }}
+                                                    title="Approuver"
+                                                    onClick={() => handleApprove(d)}
+                                                >
                                                     <CheckCircle size={14} color="#22c55e" />
                                                 </button>
-                                                <button className="header-icon-btn" style={{ width: '30px', height: '30px', background: 'rgba(239, 68, 68, 0.1)' }} title="Rejeter">
+                                                <button
+                                                    className="header-icon-btn"
+                                                    style={{ width: '30px', height: '30px', background: 'rgba(239, 68, 68, 0.1)' }}
+                                                    title="Rejeter"
+                                                    onClick={() => handleRejectClick(d)}
+                                                >
                                                     <XCircle size={14} color="#ef4444" />
                                                 </button>
                                             </>
                                         )}
                                         {d.statut === 'approuvee' && (
-                                            <button className="header-icon-btn" style={{ width: '30px', height: '30px', background: 'rgba(139, 92, 246, 0.1)' }} title="Convertir en OT">
+                                            <button
+                                                className="header-icon-btn"
+                                                style={{ width: '30px', height: '30px', background: 'rgba(139, 92, 246, 0.1)' }}
+                                                title="Convertir en OT"
+                                                onClick={() => handleConvertClick(d)}
+                                            >
                                                 <ArrowRight size={14} color="#8b5cf6" />
                                             </button>
                                         )}
@@ -552,6 +567,125 @@ export default function DemandesIntervention() {
                                         {submitting ? 'Envoi...' : 'Soumettre la demande'}
                                     </button>
                                 )}
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+            {/* Modal Rejeter */}
+            {showRejectModal && (
+                <div className="modal-overlay" onClick={() => setShowRejectModal(false)}>
+                    <div className="modal" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '500px' }}>
+                        <div className="modal-header">
+                            <h3 className="modal-title">Rejeter la demande</h3>
+                            <button className="modal-close" onClick={() => setShowRejectModal(false)}>
+                                <X size={20} />
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <p style={{ marginBottom: '16px', color: 'var(--text-secondary)' }}>
+                                Veuillez indiquer la raison du rejet pour la demande <strong>{selectedDemande?.numero}</strong>.
+                            </p>
+                            <textarea
+                                className="form-input form-textarea"
+                                placeholder="Raison du rejet..."
+                                value={rejectReason}
+                                onChange={(e) => setRejectReason(e.target.value)}
+                                style={{ minHeight: '100px' }}
+                            ></textarea>
+                        </div>
+                        <div className="modal-footer">
+                            <button className="btn btn-secondary" onClick={() => setShowRejectModal(false)}>Annuler</button>
+                            <button
+                                className="btn btn-danger"
+                                onClick={confirmReject}
+                                disabled={!rejectReason.trim()}
+                            >
+                                Confirmer le rejet
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Modal Convertir en OT */}
+            {showConvertModal && (
+                <div className="modal-overlay" onClick={() => !submitting && setShowConvertModal(false)}>
+                    <div className="modal" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '600px' }}>
+                        <div className="modal-header">
+                            <h3 className="modal-title">Convertir en Ordre de Travail</h3>
+                            <button className="modal-close" onClick={() => !submitting && setShowConvertModal(false)}>
+                                <X size={20} />
+                            </button>
+                        </div>
+                        <form onSubmit={confirmConvert}>
+                            <div className="modal-body">
+                                <div className="form-group">
+                                    <label className="form-label">Technicien assigné *</label>
+                                    <select
+                                        className="form-input form-select"
+                                        required
+                                        value={convertData.technicien_id}
+                                        onChange={(e) => setConvertData({ ...convertData, technicien_id: e.target.value })}
+                                    >
+                                        <option value="">Choisir un technicien</option>
+                                        {techniciens.map(t => (
+                                            <option key={t.id} value={t.id}>{t.prenom} {t.nom} ({t.specialite})</option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                                    <div className="form-group">
+                                        <label className="form-label">Priorité *</label>
+                                        <select
+                                            className="form-input form-select"
+                                            value={convertData.priorite}
+                                            onChange={(e) => setConvertData({ ...convertData, priorite: e.target.value })}
+                                        >
+                                            <option value="basse">Basse</option>
+                                            <option value="normale">Normale</option>
+                                            <option value="haute">Haute</option>
+                                            <option value="urgente">Urgente</option>
+                                        </select>
+                                    </div>
+                                    <div className="form-group">
+                                        <label className="form-label">Type de maintenance *</label>
+                                        <select
+                                            className="form-input form-select"
+                                            value={convertData.type_maintenance}
+                                            onChange={(e) => setConvertData({ ...convertData, type_maintenance: e.target.value })}
+                                        >
+                                            <option value="corrective">Corrective</option>
+                                            <option value="preventive">Préventive</option>
+                                            <option value="amelioration">Amélioration</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="form-label">Date prévue début *</label>
+                                    <input
+                                        type="date"
+                                        className="form-input"
+                                        required
+                                        value={convertData.date_prevue_debut}
+                                        onChange={(e) => setConvertData({ ...convertData, date_prevue_debut: e.target.value })}
+                                    />
+                                </div>
+
+                                <div style={{ background: 'rgba(59, 130, 246, 0.05)', padding: '12px', borderRadius: '8px', marginTop: '16px' }}>
+                                    <div style={{ fontSize: '0.9rem', fontWeight: '600', marginBottom: '4px' }}>Détails de la demande originale :</div>
+                                    <div style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)' }}>{selectedDemande?.titre}</div>
+                                </div>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-secondary" onClick={() => setShowConvertModal(false)} disabled={submitting}>
+                                    Annuler
+                                </button>
+                                <button type="submit" className="btn btn-primary" disabled={submitting}>
+                                    {submitting ? 'Création...' : 'Créer l\'Ordre de Travail'}
+                                </button>
                             </div>
                         </form>
                     </div>

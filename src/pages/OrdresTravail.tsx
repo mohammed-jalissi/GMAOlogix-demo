@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Plus, Search, Filter, Eye, Edit, X, FileText, CheckCircle } from 'lucide-react';
+import { Plus, Search, Filter, Eye, Edit, X, FileText, CheckCircle, Printer } from 'lucide-react';
 import { getEquipements } from '../lib/equipements.service';
 import { createDemandeIntervention, getOrdresTravail } from '../lib/ordres-travail.service';
 import type { Equipement, OrdreTravail } from '../lib/supabase';
 import { useDarijaNotify, DARIJA_DICTIONARY } from '../hooks/useDarijaNotify';
 import DarijaHelpBtn from '../components/Common/DarijaHelpBtn';
+import { generateOTPDF } from '../lib/pdf-generator';
 
 const statutLabels: Record<string, { text: string; class: string }> = {
     'planifie': { text: 'Planifié', class: 'badge-info' },
@@ -212,6 +213,14 @@ export default function OrdresTravail() {
                                                 <div style={{ display: 'flex', gap: '8px' }}>
                                                     <button className="header-icon-btn" style={{ width: '32px', height: '32px' }}>
                                                         <Eye size={16} />
+                                                    </button>
+                                                    <button
+                                                        className="header-icon-btn"
+                                                        style={{ width: '32px', height: '32px', background: 'rgba(59, 130, 246, 0.1)' }}
+                                                        title="Imprimer OT"
+                                                        onClick={() => generateOTPDF(ot)}
+                                                    >
+                                                        <Printer size={16} color="#3b82f6" />
                                                     </button>
                                                     <button className="header-icon-btn" style={{ width: '32px', height: '32px' }}>
                                                         <Edit size={16} />

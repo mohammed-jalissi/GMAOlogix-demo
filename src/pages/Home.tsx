@@ -3,7 +3,6 @@ import {
     LayoutDashboard,
     Settings,
     Wrench,
-    FileText,
     CalendarCheck,
     CalendarDays,
     Package,
@@ -15,8 +14,10 @@ import {
     Settings2,
     Minus,
     Square,
-    X
+    X,
+    LogOut
 } from 'lucide-react';
+import { useAuth } from '../contexts/SimpleAuthContext';
 
 const modules = [
     { path: '/dashboard', icon: LayoutDashboard, label: 'Dashboard', color: 'dashboard' },
@@ -34,6 +35,7 @@ const modules = [
 ];
 
 export default function Home() {
+    const { logout } = useAuth();
     return (
         <div className="app-container">
             {/* Header Bar */}
@@ -45,6 +47,9 @@ export default function Home() {
                 <div className="app-header-controls">
                     <button className="app-header-btn"><Minus size={14} /></button>
                     <button className="app-header-btn"><Square size={12} /></button>
+                    <button className="app-header-btn" onClick={logout} title="Déconnexion" style={{ color: '#ef4444' }}>
+                        <LogOut size={14} />
+                    </button>
                     <button className="app-header-btn"><X size={14} /></button>
                 </div>
             </header>

@@ -89,7 +89,7 @@ export const generateDemandePDF = (demande: DemandeIntervention) => {
 
     const detailsData = [
         ['Date de création', new Date(demande.created_at).toLocaleString('fr-FR')],
-        ['Date souhaitée', new Date(demande.date_souhaitee).toLocaleDateString('fr-FR')],
+        ['Date souhaitée', demande.date_souhaitee ? new Date(demande.date_souhaitee).toLocaleDateString('fr-FR') : 'Non précisée'],
         ['Type', demande.type_demande.toUpperCase()],
         ['Demandeur', demande.demandeur ? `${demande.demandeur.prenom} ${demande.demandeur.nom}` : 'N/A'],
         ['Titre', demande.titre]
@@ -128,4 +128,83 @@ export const generateDemandePDF = (demande: DemandeIntervention) => {
 
     // Save
     doc.save(`Demande_${demande.numero}.pdf`);
+};
+
+export const generateOTPDF = (ot: any) => {
+    const doc = new jsPDF();
+    const primaryColor = [26, 138, 158]; // #1a8a9e (Teal)
+
+    // Header
+    doc.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+    doc.rect(0, 0, 210, 40, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(24);
+    doc.setFont('helvetica', 'bold');
+    doc.text("GMAOlogix", 20, 25);
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'normal');
+    doc.text("ORDRE DE TRAVAIL", 130, 25);
+
+    // Title & Info
+    doc.setTextColor(0, 0, 0);
+    doc.setFontSize(18);
+    doc.setFont('helvetica', 'bold');
+    doc.text(ot.titre, 14, 55);
+    doc.setFontSize(12);
+    doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+    doc.text(`N° ${ot.numero}`, 14, 62);
+
+    // Main Info Table
+    const infoData = [
+        ['Statut', ot.statut?.toUpperCase() || 'N/A', 'Priorité', ot.priorite?.toUpperCase() || 'N/A'],
+        ['Équipement', ot.equipement?.nom || 'N/A', 'Localisation', ot.equipement?.localisation || 'N/A'],
+        ['Type Maintenance', ot.type_maintenance?.toUpperCase() || 'N/A', 'Date Prévue', ot.date_prevue_debut ? new Date(ot.date_prevue_debut).toLocaleDateString() : 'N/A'],
+        ['Technicien', ot.technicien?.profil ? `${ot.technicien.profil.nom} ${ot.technicien.profil.prenom}` : 'Non assigné', '', '']
+    ];
+
+    autoTable(doc, {
+        startY: 75,
+        body: infoData,
+        theme: 'grid',
+        styles: { fontSize: 10, cellPadding: 3 },
+        columnStyles: {
+            0: { fontStyle: 'bold', fillColor: [245, 247, 250], cellWidth: 40 },
+            2: { fontStyle: 'bold', fillColor: [245, 247, 250], cellWidth: 40 }
+        }
+    });
+
+    // Description Section
+    const descY = (doc as any).lastAutoTable.finalY + 15;
+    doc.setFontSize(12);
+    doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+    doc.setFont('helvetica', 'bold');
+    doc.text("DESCRIPTION DES TRAVAUX", 14, descY);
+    doc.line(14, descY + 2, 196, descY + 2);
+
+    doc.setFontSize(10);
+    doc.setTextColor(0);
+    doc.setFont('helvetica', 'normal');
+    const splitDesc = doc.splitTextToSize(ot.description || "Aucune description fournie.", 180);
+    doc.text(splitDesc, 14, descY + 10);
+
+    // Conclusion Box (Signatures)
+    const sigY = 240;
+    doc.setDrawColor(200);
+    doc.rect(14, sigY, 90, 30);
+    doc.rect(106, sigY, 90, 30);
+    doc.setFontSize(9);
+    doc.text("Signature Responsable", 16, sigY + 5);
+    doc.text("Signature Technicien", 108, sigY + 5);
+
+    // Footer
+    const pageCount = (doc as any).internal.getNumberOfPages();
+    for (let i = 1; i <= pageCount; i++) {
+        doc.setPage(i);
+        doc.setFontSize(8);
+        doc.setTextColor(150);
+        doc.text(`Page ${i} / ${pageCount}`, 196, 285, { align: 'right' });
+        doc.text(`Généré par GMAOlogix - Logiciel de Maintenance`, 14, 285);
+    }
+
+    doc.save(`OT_${ot.numero}.pdf`);
 };
